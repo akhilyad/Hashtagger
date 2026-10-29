@@ -1,0 +1,35 @@
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+*.env
+*.key
+*.pem
+*.cert
+*.p12
+*.pfx
+secrets.json
+credentials.json
+token.json
+client_secret*.json
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE & Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node / Web / Python dependencies & caches (as applicable)
+node_modules/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+build/
+dist/
