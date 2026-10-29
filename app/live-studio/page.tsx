@@ -346,14 +346,14 @@ export default function LiveStudioPage() {
   const filteredTrending = trendingTags.filter((h) =>
     searchQuery.trim()
       ? h.tag.toLowerCase().includes(searchQuery.trim().toLowerCase()) ||
-        h.reason.toLowerCase().includes(searchQuery.trim().toLowerCase())
+      h.reason.toLowerCase().includes(searchQuery.trim().toLowerCase())
       : true
   );
 
   const filteredBestMatch = bestMatchTags.filter((h) =>
     searchQuery.trim()
       ? h.tag.toLowerCase().includes(searchQuery.trim().toLowerCase()) ||
-        h.reason.toLowerCase().includes(searchQuery.trim().toLowerCase())
+      h.reason.toLowerCase().includes(searchQuery.trim().toLowerCase())
       : true
   );
 
@@ -433,11 +433,10 @@ export default function LiveStudioPage() {
                 key={sample.id}
                 type="button"
                 onClick={() => handleSelectSample(sample.id)}
-                className={`px-3 py-1.5 text-xs font-medium rounded-md border transition-colors whitespace-nowrap cursor-pointer ${
-                  caption === sample.caption
+                className={`px-3 py-1.5 text-xs font-medium rounded-md border transition-colors whitespace-nowrap cursor-pointer ${caption === sample.caption
                     ? 'bg-slate-900 text-white border-slate-900'
                     : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
-                }`}
+                  }`}
               >
                 {sample.label}
               </button>
@@ -469,11 +468,10 @@ export default function LiveStudioPage() {
                         key={pid}
                         type="button"
                         onClick={() => setPlatform(pid)}
-                        className={`py-2 px-1 text-xs font-medium rounded-md transition-colors whitespace-nowrap truncate cursor-pointer ${
-                          active
+                        className={`py-2 px-1 text-xs font-medium rounded-md transition-colors whitespace-nowrap truncate cursor-pointer ${active
                             ? 'bg-white text-slate-950 shadow-xs font-semibold'
                             : 'text-slate-600 hover:text-slate-950'
-                        }`}
+                          }`}
                       >
                         {spec.shortLabel}
                       </button>
@@ -492,11 +490,10 @@ export default function LiveStudioPage() {
                     Your Post
                   </label>
                   <span
-                    className={`text-xs font-mono tabular-nums ${
-                      totalCaptionLength > currentSpec.maxCharacterLimit
+                    className={`text-xs font-mono tabular-nums ${totalCaptionLength > currentSpec.maxCharacterLimit
                         ? 'text-red-600 font-semibold'
                         : 'text-slate-500'
-                    }`}
+                      }`}
                   >
                     {totalCaptionLength}/{currentSpec.maxCharacterLimit} chars
                   </span>
@@ -823,11 +820,10 @@ export default function LiveStudioPage() {
                       <div
                         key={item.tag}
                         onClick={() => toggleTagSelection(item.tag)}
-                        className={`p-3 rounded-xl border text-xs transition-colors cursor-pointer flex items-start justify-between gap-2 ${
-                          isSelected
+                        className={`p-3 rounded-xl border text-xs transition-colors cursor-pointer flex items-start justify-between gap-2 ${isSelected
                             ? 'bg-emerald-50/60 border-emerald-300'
                             : 'bg-[#FAFAFA] border-slate-200 hover:bg-slate-50'
-                        }`}
+                          }`}
                       >
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">
@@ -877,11 +873,10 @@ export default function LiveStudioPage() {
                       <div
                         key={item.tag}
                         onClick={() => toggleTagSelection(item.tag)}
-                        className={`p-3 rounded-xl border text-xs transition-colors cursor-pointer flex items-start justify-between gap-2 ${
-                          isSelected
+                        className={`p-3 rounded-xl border text-xs transition-colors cursor-pointer flex items-start justify-between gap-2 ${isSelected
                             ? 'bg-indigo-50/60 border-indigo-300'
                             : 'bg-[#FAFAFA] border-slate-200 hover:bg-slate-50'
-                        }`}
+                          }`}
                       >
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">

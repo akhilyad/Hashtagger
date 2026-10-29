@@ -108,18 +108,20 @@ cd Hashtagger
 npm install
 ```
 
-### Environment Variables
+### Environment Variables & Security
 
-Create a `.env.local` file (refer to `.env.example`):
+> 🔒 **Security Notice**: Never commit real API keys or `.env.local` files to GitHub. All `.env*.local` files are strictly blocked by `.gitignore`.
+
+Create a local `.env.local` file for development (use `.env.example` as a template):
 
 ```env
-# Gemini Multimodal AI
+# Gemini Multimodal AI (kept private on server side)
 GEMINI_API_KEY="your-gemini-api-key"
 
 # Application URL
 APP_URL="http://localhost:3000"
 
-# Stripe Payments (Optional for live checkout; simulated mode is available)
+# Stripe Payments (Optional; simulated checkout mode is automatically enabled if omitted)
 STRIPE_SECRET_KEY="sk_test_..."
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_test_..."
 ```
