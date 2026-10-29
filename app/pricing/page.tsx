@@ -133,24 +133,30 @@ export default function PricingPage() {
             return (
               <div
                 key={tierId}
-                className={`bg-white rounded-xl p-6 flex flex-col justify-between space-y-6 border ${
+                className={`bg-white rounded-2xl p-6 sm:p-7 flex flex-col justify-between space-y-6 transition-all duration-200 border relative ${
                   isHighlighted
-                    ? 'border-indigo-600 ring-1 ring-indigo-600 shadow-sm'
-                    : 'border-slate-200'
+                    ? 'border-indigo-600 ring-2 ring-indigo-500/20 shadow-xl shadow-indigo-500/10'
+                    : 'border-slate-200 hover:border-slate-300 shadow-xs'
                 }`}
               >
+                {isHighlighted && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white text-[11px] font-bold px-3 py-0.5 rounded-full uppercase tracking-wider shadow-sm flex items-center gap-1 font-mono">
+                    <span>★ MOST POPULAR</span>
+                  </div>
+                )}
+
                 <div className="space-y-4">
                   <div className="space-y-1">
                     <div className="flex items-center justify-between gap-2">
                       <h3
-                        className="text-lg font-bold text-slate-950"
+                        className="text-xl font-bold text-slate-950"
                         style={{ fontFamily: 'var(--font-display), sans-serif' }}
                       >
                         {plan.name}
                       </h3>
-                      {isHighlighted && (
-                        <span className="text-xs font-semibold text-indigo-600">
-                          Most Popular
+                      {tierId === 'pro' && (
+                        <span className="text-[10px] font-mono font-semibold uppercase text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                          Best Value
                         </span>
                       )}
                     </div>

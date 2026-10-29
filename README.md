@@ -1,6 +1,20 @@
-# ⚡ HASHTAGGER: Smart Multimodal Hashtag Intelligence & Trend Engine
+<div align="center">
 
-> **Stop guessing your hashtags.** Hashtagger scans your post copy and uploaded images using Gemini multimodal AI to synthesize high-velocity, platform-optimized hashtags for Instagram, TikTok, X, LinkedIn, and YouTube.
+<img width="1200" alt="HASHTAGGER // AI Trend Engine Banner" src="public/images/hashtagger-banner.jpg" style="border-radius: 14px; box-shadow: 0 20px 50px -15px rgba(0,0,0,0.6); max-width: 100%;" />
+
+# ⚡ HASHTAGGER: The Multimodal Hashtag Intelligence Engine
+
+[![Next.js 15](https://img.shields.io/badge/Next.js-15.5-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![Gemini Multimodal](https://img.shields.io/badge/Gemini%20AI-Multimodal%20Vision-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
+[![Stripe Certified](https://img.shields.io/badge/Stripe-Live%20Paywall-635BFF?style=for-the-badge&logo=stripe&logoColor=white)](https://stripe.com/)
+[![Primary Currency EUR](https://img.shields.io/badge/Currency-EUR%20%E2%82%AC%20(Primary)-10B981?style=for-the-badge)](https://github.com/akhilyad/Hashtagger)
+[![UI System](https://img.shields.io/badge/UI-21st.dev%20Bento-0B0F19?style=for-the-badge&logo=tailwind-css&logoColor=38BDF8)](https://21st.dev/)
+
+<br/>
+
+> *"Stop guessing hashtags like it's 2015. Hashtagger scans both your post text and uploaded media using Gemini Multimodal AI to synthesize high-velocity, platform-tuned tags that actually rank."*
+
+</div>
 
 ---
 

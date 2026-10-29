@@ -1,88 +1,133 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Copy, Check, TrendingUp, Flame, Zap } from 'lucide-react';
 
-const FULL_TEXT = 'Sharing our new project today!';
+interface DemoScenario {
+  platform: 'Instagram' | 'TikTok' | 'X';
+  caption: string;
+  reach: string;
+  tags: { tag: string; velocity: string; tier: 'emerging' | 'niche' | 'broad' }[];
+}
 
-const DEMO_TAGS = [
-  '#CreateEveryday',
-  '#TechUpdate',
-  '#SideProject',
+const SCENARIOS: DemoScenario[] = [
+  {
+    platform: 'Instagram',
+    caption: 'Dialing in a washed Ethiopian pour-over before a 6-hour deep work sprint ☕',
+    reach: '840K impressions',
+    tags: [
+      { tag: '#slowmorningritual', velocity: '+85% surge', tier: 'emerging' },
+      { tag: '#pourovercoffee', velocity: 'Active', tier: 'niche' },
+      { tag: '#deepworkroutine', velocity: '+110%', tier: 'emerging' },
+      { tag: '#specialtycoffee', velocity: 'Broad', tier: 'broad' },
+    ],
+  },
+  {
+    platform: 'TikTok',
+    caption: '5:30 AM tempo run in the rain. 12km done before the city wakes up 🏃‍♂️⚡',
+    reach: '1.4M views',
+    tags: [
+      { tag: '#runtokcommunity', velocity: '+142% viral', tier: 'emerging' },
+      { tag: '#5amrunclub', velocity: '+64%', tier: 'emerging' },
+      { tag: '#temporun', velocity: 'High intent', tier: 'niche' },
+      { tag: '#marathontraining', velocity: 'Core', tier: 'broad' },
+    ],
+  },
+  {
+    platform: 'X',
+    caption: 'Shipped our new real-time multimodal hashtag intelligence engine today 🚀',
+    reach: '320K impressions',
+    tags: [
+      { tag: '#buildinpublic', velocity: '+95%', tier: 'emerging' },
+      { tag: '#aiengineering', velocity: '+130% surge', tier: 'emerging' },
+      { tag: '#indiehackers', velocity: 'Broad', tier: 'broad' },
+    ],
+  },
 ];
 
 export default function InteractiveDemo() {
+  const [activeScenarioIdx, setActiveScenarioIdx] = useState(0);
   const [typedText, setTypedText] = useState('');
   const [phase, setPhase] = useState<'typing' | 'scanning' | 'results'>('typing');
+  const [copied, setCopied] = useState(false);
+
+  const scenario = SCENARIOS[activeScenarioIdx];
 
   useEffect(() => {
     let isCancelled = false;
 
-    const runLoop = async () => {
-      while (!isCancelled) {
-        // Step 1: Typing text (0.0s – 0.6s)
-        setPhase('typing');
-        setTypedText('');
-        const stepDelay = Math.max(12, Math.floor(550 / FULL_TEXT.length));
-        for (let i = 1; i <= FULL_TEXT.length; i++) {
-          if (isCancelled) return;
-          setTypedText(FULL_TEXT.slice(0, i));
-          await new Promise((r) => setTimeout(r, stepDelay));
-        }
+    const runSimulation = async () => {
+      setPhase('typing');
+      setTypedText('');
+      setCopied(false);
 
+      const text = scenario.caption;
+      const stepDelay = Math.max(10, Math.floor(400 / text.length));
+
+      for (let i = 1; i <= text.length; i++) {
         if (isCancelled) return;
-        await new Promise((r) => setTimeout(r, 100));
-
-        // Step 2: Brief pulse / scan animation (0.6s – 1.0s = 0.4s)
-        setPhase('scanning');
-        await new Promise((r) => setTimeout(r, 400));
-
-        if (isCancelled) return;
-
-        // Step 3: Hashtag badges pop up (1.0s – 2.0s = 1.0s)
-        setPhase('results');
-        await new Promise((r) => setTimeout(r, 1000));
-
-        if (isCancelled) return;
-        await new Promise((r) => setTimeout(r, 150));
+        setTypedText(text.slice(0, i));
+        await new Promise((r) => setTimeout(r, stepDelay));
       }
+
+      if (isCancelled) return;
+      await new Promise((r) => setTimeout(r, 120));
+
+      setPhase('scanning');
+      await new Promise((r) => setTimeout(r, 380));
+
+      if (isCancelled) return;
+      setPhase('results');
     };
 
-    runLoop();
+    runSimulation();
 
     return () => {
       isCancelled = true;
     };
-  }, []);
+  }, [activeScenarioIdx]);
+
+  const handleCopyTags = () => {
+    const textToCopy = scenario.tags.map((t) => t.tag).join(' ');
+    navigator.clipboard?.writeText(textToCopy);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
-    <div className="w-full bg-white border border-slate-200 rounded-2xl p-5 shadow-sm text-slate-900 select-none">
+    <div className="w-full bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 shadow-md text-slate-900 relative">
       {/* Simulation card header */}
-      <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100 text-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3.5 mb-3.5 border-b border-slate-100 gap-2">
         <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-          <span className="font-semibold text-slate-800 text-xs">
-            Live Hashtag Preview
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="font-bold text-slate-950 text-xs tracking-tight">
+            Interactive Multimodal Engine
           </span>
         </div>
-        <div className="font-mono text-[11px] text-slate-500">
-          {phase === 'typing' && 'Typing caption...'}
-          {phase === 'scanning' && (
-            <span className="text-indigo-600 font-medium inline-flex items-center gap-1">
-              <Sparkles className="w-3 h-3 animate-spin" />
-              Scanning (0.4s)
-            </span>
-          )}
-          {phase === 'results' && (
-            <span className="text-emerald-700 font-medium">Ready</span>
-          )}
+
+        {/* Platform switch tabs */}
+        <div className="flex items-center gap-1 p-0.5 bg-slate-100 rounded-lg">
+          {SCENARIOS.map((s, idx) => (
+            <button
+              key={s.platform}
+              type="button"
+              onClick={() => setActiveScenarioIdx(idx)}
+              className={`px-2.5 py-1 text-[11px] font-mono font-semibold rounded-md transition-all cursor-pointer ${
+                activeScenarioIdx === idx
+                  ? 'bg-white text-slate-950 shadow-xs'
+                  : 'text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              {s.platform}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* Input Field Preview Box */}
       <div className="space-y-3">
-        <div className="rounded-xl bg-slate-50 border border-slate-200 p-3.5 h-12 flex items-center">
-          <p className="text-xs sm:text-sm text-slate-800 font-sans flex items-center">
+        <div className="rounded-xl bg-slate-50/90 border border-slate-200 p-3.5 min-h-[58px] flex items-center justify-between gap-3">
+          <p className="text-xs sm:text-sm text-slate-800 font-sans leading-relaxed">
             <span>{typedText}</span>
             {phase === 'typing' && (
               <span className="inline-block w-1.5 h-4 bg-indigo-600 ml-1 animate-pulse" />
@@ -103,31 +148,79 @@ export default function InteractiveDemo() {
           />
         </div>
 
-        {/* Results Tag Area (fixed height to prevent layout shift) */}
-        <div className="h-16 rounded-xl bg-slate-50/60 border border-slate-100 p-2.5 flex items-center justify-start">
-          {phase === 'results' ? (
-            <div className="w-full flex flex-wrap items-center gap-2">
-              {DEMO_TAGS.map((tag) => (
-                <span
-                  key={tag}
-                  className="inline-flex items-center px-3 py-1.5 text-xs font-medium font-mono text-indigo-700 bg-indigo-50 border border-indigo-200/80 rounded-lg shadow-2xs animate-in fade-in duration-200"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          ) : (
-            <div className="w-full text-xs text-slate-400 font-mono flex items-center gap-2 pl-2">
-              {phase === 'scanning' ? (
-                <>
-                  <Sparkles className="w-3.5 h-3.5 text-indigo-600 animate-spin" />
-                  <span className="text-slate-600">Finding trending hashtags...</span>
-                </>
-              ) : (
-                <span>Hashtags will appear here</span>
-              )}
-            </div>
-          )}
+        {/* Results Tag Area */}
+        <div className="rounded-xl bg-slate-50/70 border border-slate-200/80 p-3 space-y-3">
+          <div className="flex items-center justify-between text-[11px] font-mono">
+            <span className="text-slate-500 flex items-center gap-1.5">
+              <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Projected Reach:</span>
+              <strong className="text-slate-900">{scenario.reach}</strong>
+            </span>
+
+            {phase === 'results' && (
+              <button
+                type="button"
+                onClick={handleCopyTags}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-white border border-slate-200 hover:border-indigo-400 text-slate-700 text-[10px] font-bold font-mono transition-colors shadow-2xs cursor-pointer"
+              >
+                {copied ? (
+                  <>
+                    <Check className="w-3 h-3 text-emerald-600" />
+                    <span className="text-emerald-700">Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3 h-3 text-slate-500" />
+                    <span>Copy Tags</span>
+                  </>
+                )}
+              </button>
+            )}
+          </div>
+
+          <div className="min-h-[64px] flex items-center">
+            {phase === 'results' ? (
+              <div className="w-full flex flex-wrap items-center gap-2">
+                {scenario.tags.map((t) => {
+                  const isEmerging = t.tier === 'emerging';
+                  return (
+                    <span
+                      key={t.tag}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono font-medium rounded-lg border transition-all shadow-2xs ${
+                        isEmerging
+                          ? 'bg-emerald-50 text-emerald-950 border-emerald-200'
+                          : 'bg-white text-indigo-950 border-slate-200'
+                      }`}
+                    >
+                      <span className="font-bold">{t.tag}</span>
+                      <span
+                        className={`text-[9px] uppercase font-bold px-1.5 py-0.2 rounded ${
+                          isEmerging
+                            ? 'bg-emerald-200/60 text-emerald-800'
+                            : 'bg-slate-100 text-slate-600'
+                        }`}
+                      >
+                        {t.velocity}
+                      </span>
+                    </span>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="w-full text-xs text-slate-400 font-mono flex items-center gap-2 pl-1">
+                {phase === 'scanning' ? (
+                  <>
+                    <Sparkles className="w-3.5 h-3.5 text-indigo-600 animate-spin" />
+                    <span className="text-slate-600">
+                      Analyzing visual &amp; semantic latent clusters...
+                    </span>
+                  </>
+                ) : (
+                  <span>Generating optimized hashtag formula...</span>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
