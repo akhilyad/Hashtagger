@@ -5,10 +5,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Zap, Sparkles } from 'lucide-react';
 import { useHashtaggerStore } from '@/lib/use-hashtagger-store';
+import CurrencySelector from '@/components/CurrencySelector';
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { currentPlan } = useHashtaggerStore();
+  const { currentPlan, selectedCurrency, setSelectedCurrency } = useHashtaggerStore();
   const isPaid = currentPlan === 'pro' || currentPlan === 'agency';
 
   const navItems = [
@@ -51,12 +52,20 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* Zone 3: 1 primary action */}
-        <div className="flex items-center shrink-0">
+        {/* Zone 3: Currency & Primary action */}
+        <div className="flex items-center gap-3 shrink-0">
+          <CurrencySelector
+            value={selectedCurrency}
+            onChange={setSelectedCurrency}
+            variant="dark"
+            size="sm"
+            showLabel={false}
+          />
+
           {isPaid ? (
             <Link
               href="/live-studio"
-              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-slate-950 bg-emerald-400 rounded-lg hover:bg-emerald-300 transition-colors whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-slate-950 bg-emerald-400 rounded-lg hover:bg-emerald-300 transition-colors whitespace-nowrap shrink-0 shadow-sm"
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>Open Studio</span>
@@ -64,7 +73,7 @@ export default function Navbar() {
           ) : (
             <Link
               href="/pricing"
-              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-slate-950 bg-emerald-400 rounded-lg hover:bg-emerald-300 transition-colors whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-slate-950 bg-emerald-400 rounded-lg hover:bg-emerald-300 transition-colors whitespace-nowrap shrink-0 shadow-sm"
             >
               <Zap className="w-3.5 h-3.5" />
               <span>Upgrade to Pro</span>

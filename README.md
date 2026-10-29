@@ -1,131 +1,135 @@
-<div align="center">
+# ⚡ HASHTAGGER: Smart Multimodal Hashtag Intelligence & Trend Engine
 
-# ⚡ HASHTAGGER: The Accelerated Intelligence Engine for Trends
-
-[![NVIDIA Blackwell Green](https://img.shields.io/badge/Architecture-Blackwell%20Ultra-76B900?style=for-the-badge&logo=nvidia&logoColor=black)](https://github.com)
-[![Accelerated Computing](https://img.shields.io/badge/Compute-Accelerated%20Full--Stack-0B0F19?style=for-the-badge&logo=lightning&logoColor=76B900)](https://github.com)
-[![Status](https://img.shields.io/badge/Scale-HyperScale%20Real--Time-76B900?style=for-the-badge)](https://github.com)
-[![Leather Jacket Certified](https://img.shields.io/badge/Certified-Leather%20Jacket%20Approved-111111?style=for-the-badge&logoColor=white)](https://github.com)
-
-<br/>
-
-> *"Software isn't eating the world anymore. AI factories are manufacturing intelligence, token by token, epoch by epoch. We didn't build a hashtag generator. We reimagined the physics of cultural velocity."*
-> 
-> — **Jensen Huang** *(in spirit, black leather jacket zipped, GTC Arena)*
-
-<br/>
-
-```
-       ┌────────────────────────────────────────────────────────┐
-       │   "The more you hashtag, the more you save."           │
-       │   Accelerating content discovery at the speed of light │
-       └────────────────────────────────────────────────────────┘
-```
-
-</div>
+> **Stop guessing your hashtags.** Hashtagger scans your post copy and uploaded images using Gemini multimodal AI to synthesize high-velocity, platform-optimized hashtags for Instagram, TikTok, X, LinkedIn, and YouTube.
 
 ---
 
-## 🌌 The Narrative: A Whole New Era of Computing
+## 🌟 Key Features
 
-For three decades, computing was about retrieval. You indexed words. You searched tables. You waited.
-
-**That era is over.**
-
-We are at the beginning of a new industrial revolution. Today, every post, every reel, every drop of digital pulse is an energy equation. If your hashtags lag behind the collective neural network of the internet by even five hundred milliseconds, **you are invisible**.
-
-**HASHTAGGER** is not a script. It is an **Accelerated Semantic Fabric**. It ingests multimodal latent signals, maps contextual resonance across cultural subgraphs, and synthesizes high-velocity tags before the algorithm even knows what hit it.
-
-**We do full-stack hashtag synthesis.** From the metal of sentiment vectors, up through the TensorRT-optimized trend pipeline, straight into the social fabric.
-
----
-
-## 🎨 Blackwell & Obsidian Color Palette
-
-Engineered with raw contrast, neon precision, and the signature aesthetic of extreme compute:
-
-| Tone | Hex Code | Purpose | Signal |
-| :--- | :--- | :--- | :--- |
-| **NVIDIA HyperGreen** | `#76B900` | Primary Accent / Tensor Activity | 🟢 Compute In Flight |
-| **Obsidian Leather** | `#0B0F19` | Chassis Base & Deep Space Dark | ⬛ Foundry Substrate |
-| **Titanium Silver** | `#E5E7EB` | High-Precision Type & Metric Headers | ⚪ Pure Signal |
-| **Neural Cyan** | `#00F5FF` | Real-Time Sentiment & Edge Flux | ⚡ Quantum Interconnect |
-| **Thermal Gold** | `#F59E0B` | Viral Anomaly / Breakout Vectors | 🔥 Thermal Threshold Met |
+- **Multimodal AI Post Analysis**: Ingests both visual content (photos/imagery) and textual captions to detect niche communities, rising cultural topics, and algorithmic reach tiers.
+- **Balanced 3-Part Growth Mix**: Automatically segments recommendations into:
+  - 🟢 **Emerging / Rising**: Fast-growing micro-communities with high organic engagement.
+  - 🔵 **Niche**: High-affinity targeted audience tags.
+  - 🟣 **High Volume / Broad**: Core platform category signals.
+- **Live Real-Time Breaking Trends**: Grounded in real-time web discovery to catch breakout moments before they become saturated.
+- **Multi-Platform Support**: Tailored tag counts, character constraints, and formatting for **Instagram**, **TikTok**, **X (Twitter)**, **LinkedIn**, and **YouTube**.
+- **One-Click Exports & Bundles**: Instant clipboard copy and full CSV spreadsheet downloads for creators and agency campaign management.
 
 ---
 
-## 📐 The Full-Stack Architecture
+## 💳 Stripe Integration & Multi-Currency Engine
 
-```mermaid
-graph TD
-    classDef nvGreen fill:#76B900,stroke:#0B0F19,stroke-width:2px,color:#000000,font-weight:bold;
-    classDef darkNode fill:#1E293B,stroke:#76B900,stroke-width:1.5px,color:#E5E7EB;
-    classDef edgeNode fill:#0F172A,stroke:#00F5FF,stroke-width:1.5px,color:#00F5FF;
+Hashtagger includes complete, production-ready **Stripe payment processing** with localized multi-currency support:
 
-    A[" Raw Input: Media / Text / Transcripts "]:::edgeNode --> B[" Multimodal Semantic Ingestion "]:::darkNode
-    B --> C[" Cultural Latent Space Encoder "]:::darkNode
-    C --> D{" HASHTAGGER TensorRT Pipeline "}:::nvGreen
-    D -->|Semantic Clustering| E[" High-Affinity Niche Clusters "]:::darkNode
-    D -->|Velocity Projection| F[" Exponential Trend Surge "]:::darkNode
-    D -->|Algorithmic Synergy| G[" Maximal Engagement Vectors "]:::darkNode
-    E & F & G --> H[" Ultra-Targeted Production Hashtags "]:::nvGreen
-```
+### 1. Primary Currency: Euro (€ / EUR)
+- **Primary Base Currency**: Euro (`EUR`) is the primary currency throughout the platform.
+- **Tier Pricing (EUR Base)**:
+  - **Starter Free**: €0 / month (3 daily AI analyses, 2 saved bundles).
+  - **Creator Pro**: €19 / month (or €15/mo billed annually) with unlimited analyses and live trends.
+  - **Growth Agency**: €49 / month (or €39/mo billed annually) with priority speed and team seats.
+
+### 2. Currency Dropdown Menu & Real-Time Conversion
+Users can select their preferred checkout currency anywhere across the app (in the global **Navbar**, the **Pricing Page**, or directly inside the **Stripe Paywall Modal**):
+- 🇪🇺 **EUR (€)** - *Euro (Primary)*
+- 🇺🇸 **USD ($)** - *US Dollar*
+- 🇬🇧 **GBP (£)** - *British Pound*
+- 🇨🇦 **CAD (CA$)** - *Canadian Dollar*
+- 🇦🇺 **AUD (A$)** - *Australian Dollar*
+- 🇯🇵 **JPY (¥)** - *Japanese Yen (Zero-decimal currency)*
+- 🇨🇭 **CHF (CHF)** - *Swiss Franc*
+- 🇮🇳 **INR (₹)** - *Indian Rupee*
+
+### 3. Stripe Checkout Flow
+- **Server API Route**: `POST /api/stripe/checkout` dynamically creates Stripe Checkout Sessions with accurate currency codes and unit amounts (handles cents vs zero-decimal currencies like JPY).
+- **Live vs Simulated Mode**:
+  - When `STRIPE_SECRET_KEY` is provided, initiates an official 3D-Secure Stripe Checkout session redirect.
+  - When keys are omitted (e.g. in local preview), automatically simulates a 256-bit bank authorization and unlocks the account into `/receipt` for testing.
 
 ---
 
-## ⚡ The Law of Accelerated Reach
+## 🎨 Recommended 21st.dev Components & UI Themes
 
-> *"In the old world, creators guessed tags based on intuition. That is like rendering ray-traced reflections on a 1995 CPU. It is fundamentally unscalable."*
+To take Hashtagger's visual design to the next level, here are curated recommendations from [21st.dev](https://21st.dev) (the premier open-source React/Tailwind component ecosystem):
 
-1. **Extreme Low Latency:** Millisecond inference to capture breaking virality curves at $T_0$.
-2. **Context-Aware Semantic Density:** Zero fluff. Every tag earns its presence through high-dimensional vector alignment.
-3. **Grace-Hopper Scale Reasoning:** Understands nuanced slang, cultural micro-moments, and platform-specific algorithmic weighting.
+### 🌈 Themes
+1. **Cyber Obsidian & Hyper Emerald (Dark Mode)**
+   - *Palette*: Deep slate/black substrate (`#020617`, `#0B0F19`), neon emerald accents (`#10B981`, `#76B900`), and pure white monospace metrics.
+   - *Vibe*: High-frequency algorithmic trading meets creator SaaS.
+2. **Minimalist Bento Grid (Light Mode - Current Default)**
+   - *Palette*: Crisp `#FAFAFA` canvas, subtle slate-200 borders, indigo primary CTAs, and emerald status badges.
+   - *Vibe*: Clean, trustworthy, and distraction-free.
+3. **Aurora / Mesh Gradient Glow**
+   - Soft radial ambient glow behind the Hero and interactive demo cards using blurred CSS background gradients.
+
+### 🧩 21st.dev UI Components to Incorporate
+1. **Animated Number Ticker / Counter** (`@magicui/number-ticker` on 21st.dev)
+   - Smoothly animates numbers when switching currencies or viewing live tag counts and velocity percentages.
+2. **Interactive Bento Grid** (`@aceternity/bento-grid` or `@magicui/bento-grid` on 21st.dev)
+   - Ideal for the "Why It Works" architecture breakdown and platform capability comparisons.
+3. **Animated Currency & Billing Segmented Tabs**
+   - Sliding pill indicator with spring physics (Framer Motion) for switching between Monthly/Annual and Currency selection.
+4. **Shimmer / Glow Border Card** (`@magicui/shining-card` or `@aceternity/moving-border` on 21st.dev)
+   - Highlights the "Recommended" Creator Pro tier in pricing with an ethereal glowing border.
+5. **Horizontal Infinite Tag Marquee** (`@magicui/marquee` on 21st.dev)
+   - Smooth continuous ticker displaying trending hashtags across Instagram, TikTok, and X on the landing page.
+6. **Confetti / Particle Canvas** (`canvas-confetti` or `@magicui/confetti` on 21st.dev)
+   - Triggered upon successful Stripe payment on the `/receipt` page.
 
 ---
 
-## 🚀 Quick Ignition
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+ or 20+
+- npm or pnpm
+
+### Installation
 
 ```bash
-# Clone the intelligence engine
-git clone https://github.com/akhilyad/HASHTAGGER.git
+# Clone the repository
+git clone https://github.com/akhilyad/Hashtagger.git
+cd Hashtagger
 
-# Step into the factory
-cd HASHTAGGER
+# Install dependencies
+npm install
+```
 
-# Fire up the engine (Virtual Environment)
-python -m venv .venv
-source .venv/bin/activate  # Or .venv\Scripts\Activate.ps1 on Windows
+### Environment Variables
 
-# Ignite synthesis
-# "It doesn't just run. It flies."
-python run_hashtagger.py --prompt "Next-gen leather jacket drop in cyberpunk Neo-Tokyo"
+Create a `.env.local` file (refer to `.env.example`):
+
+```env
+# Gemini Multimodal AI
+GEMINI_API_KEY="your-gemini-api-key"
+
+# Application URL
+APP_URL="http://localhost:3000"
+
+# Stripe Payments (Optional for live checkout; simulated mode is available)
+STRIPE_SECRET_KEY="sk_test_..."
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_test_..."
+```
+
+### Running the App
+
+```bash
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm start
 ```
 
 ---
 
-## 🔮 Sample Synthesis Output
+## 🛠️ Tech Stack
 
-```json
-{
-  "inference_latency_ms": 1.42,
-  "resonance_index": 0.9984,
-  "engine_state": "THERMAL_MAX_ACCELERATION",
-  "recommended_payload": [
-    "#AcceleratedIntelligence",
-    "#FullStackDominance",
-    "#BlackwellSpeed",
-    "#CulturalVelocity",
-    "#TheMoreYouTagTheMoreYouSave"
-  ]
-}
-```
-
----
-
-<div align="center">
-
-### *"Remember: The more compute you apply to your reach, the more audience you capture."*
-
-Crafted with extreme passion for builders, creators, and pioneers of the generative frontier.
-
-</div>
+- **Framework**: Next.js 15 (App Router, React 19)
+- **Styling**: Tailwind CSS, PostCSS, Lucide Icons, tw-animate-css
+- **AI Core**: Google GenAI SDK (`@google/genai`)
+- **Payments**: Stripe (`stripe`, `@stripe/stripe-js`)
+- **Animations**: Motion (`motion`)
+- **State Management**: React state with local-storage persistence (`lib/use-hashtagger-store.ts`)

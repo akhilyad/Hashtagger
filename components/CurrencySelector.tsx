@@ -14,6 +14,8 @@ interface CurrencySelectorProps {
   className?: string;
   size?: 'sm' | 'md';
   showLabel?: boolean;
+  variant?: 'light' | 'dark';
+  align?: 'left' | 'right';
 }
 
 export default function CurrencySelector({
@@ -22,6 +24,8 @@ export default function CurrencySelector({
   className = '',
   size = 'md',
   showLabel = true,
+  variant = 'light',
+  align = 'right',
 }: CurrencySelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -62,20 +66,40 @@ export default function CurrencySelector({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`inline-flex items-center justify-between gap-2 bg-white border border-slate-200 hover:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 rounded-lg text-slate-900 transition-all cursor-pointer font-medium shadow-xs ${
-          isSmall ? 'px-2.5 py-1.5 text-xs' : 'px-3 py-2 text-xs sm:text-sm'
+        className={`inline-flex items-center justify-between gap-2 rounded-lg transition-all cursor-pointer font-medium ${
+          variant === 'dark'
+            ? 'bg-slate-900 border border-slate-700/80 hover:border-slate-500 text-slate-200 hover:text-white px-2.5 py-1.5 text-xs'
+            : `bg-white border border-slate-200 hover:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-slate-900 shadow-xs ${
+                isSmall ? 'px-2.5 py-1.5 text-xs' : 'px-3 py-2 text-xs sm:text-sm'
+              }`
         }`}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
         <span className="flex items-center gap-1.5 font-sans">
           <span className="text-base leading-none">{activeCurrency.flag}</span>
-          <span className="font-semibold text-slate-950 font-mono">
+          <span
+            className={`font-semibold font-mono ${
+              variant === 'dark' ? 'text-white' : 'text-slate-950'
+            }`}
+          >
             {activeCurrency.code}
           </span>
-          <span className="text-slate-500 font-mono">({activeCurrency.symbol})</span>
+          <span
+            className={`font-mono text-xs ${
+              variant === 'dark' ? 'text-slate-400' : 'text-slate-500'
+            }`}
+          >
+            ({activeCurrency.symbol})
+          </span>
           {activeCurrency.code === 'EUR' && (
-            <span className="ml-1 text-[10px] uppercase tracking-wider font-semibold bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded border border-emerald-200/60 hidden sm:inline-block">
+            <span
+              className={`ml-1 text-[9px] uppercase tracking-wider font-semibold px-1.5 py-0.5 rounded border hidden sm:inline-block ${
+                variant === 'dark'
+                  ? 'bg-emerald-950/80 text-emerald-300 border-emerald-800/80'
+                  : 'bg-emerald-50 text-emerald-700 border-emerald-200/60'
+              }`}
+            >
               Primary
             </span>
           )}
@@ -88,7 +112,11 @@ export default function CurrencySelector({
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 sm:left-0 z-50 mt-1.5 w-64 origin-top-right rounded-xl bg-white shadow-xl ring-1 ring-black/5 border border-slate-200 py-1.5 focus:outline-none animate-in fade-in zoom-in-95 duration-100">
+        <div
+          className={`absolute ${
+            align === 'left' ? 'left-0 origin-top-left' : 'right-0 origin-top-right'
+          } z-50 mt-1.5 w-64 rounded-xl bg-white shadow-xl ring-1 ring-black/5 border border-slate-200 py-1.5 focus:outline-none animate-in fade-in zoom-in-95 duration-100`}
+        >
           <div className="px-3 py-2 border-b border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-medium">
             <span className="flex items-center gap-1">
               <Coins className="w-3.5 h-3.5 text-indigo-600" />
