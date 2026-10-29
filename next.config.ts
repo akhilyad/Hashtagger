@@ -1,5 +1,8 @@
 import type {NextConfig} from 'next';
 
+const isGithubPages = process.env.GITHUB_PAGES === 'true';
+const repoName = process.env.GITHUB_REPOSITORY?.split('/')[1] || 'Hashtagger';
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   eslint: {
@@ -8,18 +11,19 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
-  // Allow access to remote image placeholder.
   images: {
+    unoptimized: isGithubPages,
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'picsum.photos',
         port: '',
-        pathname: '/**', // This allows any path under the hostname
+        pathname: '/**',
       },
     ],
   },
-  output: 'standalone',
+  output: isGithubPages ? 'export' : 'standalone',
+  basePath: isGithubPages ? `/${repoName}` : undefined,
   transpilePackages: ['motion'],
   webpack: (config, {dev}) => {
     // HMR is disabled in AI Studio via DISABLE_HMR env var.

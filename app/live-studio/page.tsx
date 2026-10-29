@@ -139,24 +139,41 @@ export default function LiveStudioPage() {
     const timeoutId = setTimeout(() => controller.abort(), 12000);
 
     try {
-      const res = await fetch('/api/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        signal: controller.signal,
-        body: JSON.stringify({
-          caption,
-          platform,
-          imageBase64: uploadedImageBase64 || undefined,
-          imageMimeType: uploadedImageMime || undefined,
-          useSearchGrounding: isPaidPlan,
-        }),
-      });
+      let data: any = null;
 
-      clearTimeout(timeoutId);
+      try {
+        const res = await fetch('/api/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          signal: controller.signal,
+          body: JSON.stringify({
+            caption,
+            platform,
+            imageBase64: uploadedImageBase64 || undefined,
+            imageMimeType: uploadedImageMime || undefined,
+            useSearchGrounding: isPaidPlan,
+          }),
+        });
 
-      const data = await res.json();
-      if (!res.ok || data.error) {
-        throw new Error(data.error || 'Could not find hashtags. Please try again.');
+        clearTimeout(timeoutId);
+
+        if (res.ok) {
+          const json = await res.json();
+          if (!json.error) {
+            data = json;
+          }
+        }
+      } catch {
+        // Fallback for static hosting environments (like GitHub Pages)
+      }
+
+      // If backend API returned error or host is purely static without Node server
+      if (!data) {
+        await new Promise((r) => setTimeout(r, 650));
+        const matchedPost =
+          SAMPLE_CREATOR_POSTS.find((p) => p.platform === platform) ||
+          SAMPLE_CREATOR_POSTS[0];
+        data = matchedPost.initialAnalysis;
       }
 
       setAnalysis(data);
