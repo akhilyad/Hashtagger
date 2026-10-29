@@ -25,7 +25,10 @@ export interface InvoiceRecord {
   planName: string;
   billingCycle: BillingCycle;
   amount: string;
-  status: 'Paid';
+  status: 'Paid' | 'Demo';
+  /** Stripe Checkout Session id when the invoice came from a verified live payment. */
+  stripeSessionId?: string;
+  currency?: string;
 }
 
 export interface ComparisonRow {

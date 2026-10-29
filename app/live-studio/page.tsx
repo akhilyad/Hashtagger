@@ -16,17 +16,21 @@ import {
   Zap,
   TrendingUp,
   Bookmark,
+  Info,
 } from 'lucide-react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import StripePaywallModal from '@/components/StripePaywallModal';
-import { formatCurrencyPrice } from '@/lib/currency';
+import { getPlanCharge } from '@/lib/currency';
+import { apiUrl } from '@/lib/payments-config';
 import {
   PlatformId,
   HashtagRecommendation,
   AnalysisResponse,
   SavedBundle,
   PLATFORM_SPECS,
+  PRICING_PLANS,
   SAMPLE_CREATOR_POSTS,
 } from '@/lib/hashtag-data';
 import {
@@ -35,6 +39,15 @@ import {
 } from '@/lib/use-hashtagger-store';
 
 type ScanButtonState = 'idle' | 'scanning' | 'done';
+
+const IS_DEV = process.env.NODE_ENV !== 'production';
+const ANALYZE_TIMEOUT_MS = 12000;
+
+type AnalyzeApiPayload = Partial<AnalysisResponse> & { error?: string };
+
+function isAnalysisResponse(value: AnalyzeApiPayload | null): value is AnalysisResponse {
+  return Boolean(value && !value.error && Array.isArray(value.hashtags));
+}
 
 export default function LiveStudioPage() {
   const initialSample = SAMPLE_CREATOR_POSTS[0];
@@ -49,6 +62,9 @@ export default function LiveStudioPage() {
   } = useHashtaggerStore();
 
   const isPaidPlan = currentPlan === 'pro' || currentPlan === 'agency';
+  const currentPlanName = PRICING_PLANS[currentPlan]?.name ?? PRICING_PLANS.free.name;
+  const proAnnualPerMonth = getPlanCharge('pro', 'annual', selectedCurrency).formattedPerMonth;
+  const prefersReducedMotion = useReducedMotion();
 
   // Stripe Paywall state
   const [paywallOpen, setPaywallOpen] = useState<boolean>(false);
@@ -73,6 +89,11 @@ export default function LiveStudioPage() {
   // Scan Button State Machine: 'idle' | 'scanning' | 'done'
   const [scanState, setScanState] = useState<ScanButtonState>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // Set when the live analyze API failed and we fell back to sample data.
+  // `reason` is only populated in development builds.
+  const [sampleFallback, setSampleFallback] = useState<{ reason: string | null } | null>(
+    null
+  );
   const [analysis, setAnalysis] = useState<AnalysisResponse>(
     initialSample.initialAnalysis
   );
@@ -135,68 +156,79 @@ export default function LiveStudioPage() {
     setScanState('scanning');
     setErrorMessage(null);
 
+    setSampleFallback(null);
+
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 12000);
+    const timeoutId = setTimeout(() => controller.abort(), ANALYZE_TIMEOUT_MS);
+
+    let liveResult: AnalysisResponse | null = null;
+    let validationError: string | null = null;
+    let fallbackReason = 'Unknown error';
 
     try {
-      let data: any = null;
+      const res = await fetch(apiUrl('/api/analyze'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+        body: JSON.stringify({
+          caption,
+          platform,
+          imageBase64: uploadedImageBase64 || undefined,
+          imageMimeType: uploadedImageMime || undefined,
+          useSearchGrounding: isPaidPlan,
+        }),
+      });
+      const json = (await res.json().catch(() => null)) as AnalyzeApiPayload | null;
 
-      try {
-        const res = await fetch('/api/analyze', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          signal: controller.signal,
-          body: JSON.stringify({
-            caption,
-            platform,
-            imageBase64: uploadedImageBase64 || undefined,
-            imageMimeType: uploadedImageMime || undefined,
-            useSearchGrounding: isPaidPlan,
-          }),
-        });
-
-        clearTimeout(timeoutId);
-
-        if (res.ok) {
-          const json = await res.json();
-          if (!json.error) {
-            data = json;
-          }
-        }
-      } catch {
-        // Fallback for static hosting environments (like GitHub Pages)
+      if (res.ok && isAnalysisResponse(json)) {
+        liveResult = json;
+      } else if (res.status === 400 && json?.error) {
+        // A fixable input problem: tell the user instead of faking results.
+        validationError = json.error;
+      } else {
+        fallbackReason = json?.error || `Analyze API responded with HTTP ${res.status}`;
       }
+    } catch (err: unknown) {
+      // Network failure, timeout, or a static host (GitHub Pages) with no API routes.
+      fallbackReason =
+        err instanceof Error
+          ? err.name === 'AbortError'
+            ? `Request timed out after ${ANALYZE_TIMEOUT_MS / 1000}s`
+            : err.message || 'Network error'
+          : 'Network error';
+    } finally {
+      clearTimeout(timeoutId);
+    }
 
-      // If backend API returned error or host is purely static without Node server
-      if (!data) {
-        await new Promise((r) => setTimeout(r, 650));
-        const matchedPost =
-          SAMPLE_CREATOR_POSTS.find((p) => p.platform === platform) ||
-          SAMPLE_CREATOR_POSTS[0];
-        data = matchedPost.initialAnalysis;
-      }
+    if (validationError) {
+      setErrorMessage(validationError);
+      setScanState('idle');
+      return;
+    }
 
-      setAnalysis(data);
-      autoSelectTags(data.hashtags || []);
-
+    if (liveResult) {
+      setAnalysis(liveResult);
+      autoSelectTags(liveResult.hashtags);
+      // Only real AI scans use up a free daily credit.
       if (currentPlan === 'free') {
         decrementCredit();
       }
-
-      // Transition to completed 'done' state
       setScanState('done');
-    } catch (err: unknown) {
-      clearTimeout(timeoutId);
-      const msg =
-        err instanceof Error
-          ? err.message === 'The user aborted a request.'
-            ? 'Scan timed out. Please try again.'
-            : err.message
-          : 'Could not connect to the hashtag generator.';
-      setErrorMessage(msg);
-      // Return to idle if failed
-      setScanState('idle');
+      return;
     }
+
+    // Live AI unavailable: keep the page useful with sample data, but say so.
+    await new Promise((r) => setTimeout(r, 650));
+    const matchedPost =
+      SAMPLE_CREATOR_POSTS.find((p) => p.platform === platform) ||
+      SAMPLE_CREATOR_POSTS[0];
+    if (IS_DEV) {
+      console.warn('[live-studio] Falling back to sample results:', fallbackReason);
+    }
+    setAnalysis(matchedPost.initialAnalysis);
+    autoSelectTags(matchedPost.initialAnalysis.hashtags);
+    setSampleFallback({ reason: IS_DEV ? fallbackReason : null });
+    setScanState('done');
   };
 
   // Handle Photo Upload
@@ -244,6 +276,7 @@ export default function LiveStudioPage() {
     autoSelectTags(found.initialAnalysis.hashtags);
     setScanState('idle');
     setErrorMessage(null);
+    setSampleFallback(null);
   };
 
   const toggleTagSelection = (tag: string) => {
@@ -370,7 +403,7 @@ export default function LiveStudioPage() {
         <div className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
           <div className="flex flex-wrap items-center gap-2">
             <span className="font-semibold text-slate-900">
-              Plan: {currentPlan === 'free' ? 'Starter Free' : 'Creator Pro'}
+              Plan: {currentPlanName}
             </span>
             <span aria-hidden="true" className="text-slate-300">
               ·
@@ -396,15 +429,15 @@ export default function LiveStudioPage() {
                   );
                   setPaywallOpen(true);
                 }}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-md transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-md shadow-sm shadow-indigo-600/20 ring-1 ring-inset ring-white/10 transition-[background-color,transform] motion-safe:active:scale-[0.97] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
               >
-                <Zap className="w-3.5 h-3.5" />
+                <Zap className="w-3.5 h-3.5" aria-hidden="true" />
                 <span>
-                  Go Unlimited ({formatCurrencyPrice(15, selectedCurrency)}/mo)
+                  Go Unlimited (from {proAnnualPerMonth}/mo)
                 </span>
               </button>
             ) : (
-              <span className="text-emerald-700 font-medium">Pro Active</span>
+              <span className="text-emerald-700 font-medium">{currentPlanName} active</span>
             )}
           </div>
         </div>
@@ -413,7 +446,7 @@ export default function LiveStudioPage() {
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200 pb-5">
           <div className="space-y-1">
             <h1
-              className="text-xl sm:text-2xl font-bold text-slate-950 whitespace-nowrap tracking-tight"
+              className="text-xl sm:text-2xl font-bold text-slate-950 sm:whitespace-nowrap tracking-tight"
               style={{ fontFamily: 'var(--font-display), sans-serif' }}
             >
               Live #Studio - Test your next post
@@ -758,10 +791,15 @@ export default function LiveStudioPage() {
               {/* Results Box Top Header with Search and Copy All Tags Button */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
                 <div>
-                  <h2 className="text-base font-bold text-slate-950">
-                    Recommended Hashtags
+                  <h2 className="text-base font-bold text-slate-950 flex flex-wrap items-center gap-2">
+                    <span>Recommended Hashtags</span>
+                    {sampleFallback && (
+                      <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-800">
+                        Sample
+                      </span>
+                    )}
                   </h2>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-slate-600">
                     Grouped by how they help your post get seen
                   </p>
                 </div>
@@ -798,6 +836,37 @@ export default function LiveStudioPage() {
                   </button>
                 </div>
               </div>
+
+              {/* Sample-data notice: shown when the live analyze API failed or is unreachable */}
+              <AnimatePresence initial={false}>
+                {sampleFallback && (
+                  <motion.div
+                    key="sample-fallback"
+                    role="status"
+                    initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -6 }}
+                    transition={{ duration: prefersReducedMotion ? 0.1 : 0.22, ease: 'easeOut' }}
+                    className="flex items-start gap-2.5 rounded-lg border border-amber-200 bg-amber-50/80 p-3 text-xs text-amber-900"
+                  >
+                    <Info className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" aria-hidden="true" />
+                    <div className="min-w-0 space-y-1">
+                      <p className="font-semibold">
+                        Showing sample results — live AI is unavailable right now.
+                      </p>
+                      <p className="text-amber-800">
+                        These tags come from an example post, not your caption. No free
+                        scan was used. Try again in a moment.
+                      </p>
+                      {sampleFallback.reason && (
+                        <p className="break-words font-mono text-[11px] text-amber-800">
+                          Dev only: {sampleFallback.reason}
+                        </p>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               {/* Group 1: Trending Right Now (popular tags for fast views) */}
               <div className="space-y-3">

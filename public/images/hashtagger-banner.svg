@@ -1,0 +1,185 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="420" viewBox="0 0 1280 420" role="img" aria-labelledby="hb-title hb-desc">
+  <title id="hb-title">HASHTAGGER</title>
+  <desc id="hb-desc">Real-time AI hashtag intelligence for every post. A dark banner with the Hashtagger wordmark, feature chips and a sample hashtag-mix chart.</desc>
+  <defs>
+    <clipPath id="hb-frame">
+      <rect width="1280" height="420" rx="28"/>
+    </clipPath>
+
+    <!-- Soft colour glows -->
+    <radialGradient id="hb-glow-indigo" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#6366F1" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#6366F1" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="hb-glow-violet" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#8B5CF6" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#8B5CF6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="hb-glow-fuchsia" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#D946EF" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#D946EF" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Grid, faded towards the edges -->
+    <pattern id="hb-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#FFFFFF" stroke-opacity="0.06" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="hb-grid-fade" cx="0.42" cy="0.45" r="0.65">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="1"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="hb-grid-mask">
+      <rect width="1280" height="420" fill="url(#hb-grid-fade)"/>
+    </mask>
+
+    <!-- Text + accent gradients -->
+    <linearGradient id="hb-wordmark" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.55" stop-color="#C7D2FE"/>
+      <stop offset="1" stop-color="#F0ABFC"/>
+    </linearGradient>
+    <linearGradient id="hb-top-line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#6366F1" stop-opacity="0"/>
+      <stop offset="0.35" stop-color="#818CF8" stop-opacity="0.9"/>
+      <stop offset="0.7" stop-color="#E879F9" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#D946EF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="hb-card-border" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#A5B4FC" stop-opacity="0.85"/>
+      <stop offset="0.5" stop-color="#8B5CF6" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#F0ABFC" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="hb-card-fill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1E1B4B" stop-opacity="0.72"/>
+      <stop offset="1" stop-color="#0F172A" stop-opacity="0.88"/>
+    </linearGradient>
+    <linearGradient id="hb-card-sheen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="hb-bar" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#4F46E5"/>
+      <stop offset="1" stop-color="#A78BFA"/>
+    </linearGradient>
+    <linearGradient id="hb-bar-hot" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#7C3AED"/>
+      <stop offset="1" stop-color="#F0ABFC"/>
+    </linearGradient>
+    <clipPath id="hb-mix-clip">
+      <rect x="858" y="122" width="314" height="12" rx="6"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#hb-frame)">
+    <!-- Base -->
+    <rect width="1280" height="420" fill="#020617"/>
+
+    <!-- Glows -->
+    <ellipse cx="210" cy="40" rx="520" ry="300" fill="url(#hb-glow-indigo)"/>
+    <ellipse cx="900" cy="110" rx="460" ry="300" fill="url(#hb-glow-violet)"/>
+    <ellipse cx="1210" cy="430" rx="460" ry="280" fill="url(#hb-glow-fuchsia)"/>
+
+    <!-- Grid -->
+    <rect width="1280" height="420" fill="url(#hb-grid)" mask="url(#hb-grid-mask)"/>
+
+    <!-- Oversized hash glyph motif -->
+    <text x="560" y="452" font-family="'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, sans-serif" font-size="380" font-weight="800" fill="#FFFFFF" fill-opacity="0.035">#</text>
+
+    <!-- Top accent line -->
+    <rect x="0" y="0" width="1280" height="2" fill="url(#hb-top-line)"/>
+
+    <!-- ===== Left: brand ===== -->
+    <!-- Eyebrow badge -->
+    <g font-family="'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, sans-serif">
+      <rect x="80" y="70" width="210" height="32" rx="16" fill="#FFFFFF" fill-opacity="0.06" stroke="#A5B4FC" stroke-opacity="0.35"/>
+      <circle cx="101" cy="86" r="8" fill="#34D399" fill-opacity="0.25"/>
+      <circle cx="101" cy="86" r="4" fill="#34D399"/>
+      <text x="118" y="91" font-size="13" font-weight="700" letter-spacing="1.6" fill="#E0E7FF">LIVE TREND ENGINE</text>
+    </g>
+
+    <!-- Wordmark -->
+    <text x="76" y="196" font-family="'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, sans-serif" font-size="88" font-weight="800" letter-spacing="3" fill="url(#hb-wordmark)">HASHTAGGER</text>
+
+    <!-- Tagline -->
+    <text x="80" y="244" font-family="'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, sans-serif" font-size="26" font-weight="500" fill="#CBD5E1">Real-time AI hashtag intelligence for every post</text>
+
+    <!-- Chips -->
+    <g font-family="'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, sans-serif" font-size="15" font-weight="700" text-anchor="middle">
+      <rect x="80" y="280" width="98" height="36" rx="18" fill="#10B981" fill-opacity="0.14" stroke="#34D399" stroke-opacity="0.55"/>
+      <text x="129" y="303" fill="#6EE7B7">#rising</text>
+
+      <rect x="190" y="280" width="130" height="36" rx="18" fill="#6366F1" fill-opacity="0.16" stroke="#818CF8" stroke-opacity="0.6"/>
+      <text x="255" y="303" fill="#C7D2FE">#community</text>
+
+      <rect x="332" y="280" width="92" height="36" rx="18" fill="#D946EF" fill-opacity="0.14" stroke="#E879F9" stroke-opacity="0.55"/>
+      <text x="378" y="303" fill="#F5D0FE">#broad</text>
+
+      <rect x="436" y="280" width="136" height="36" rx="18" fill="#FFFFFF" fill-opacity="0.05" stroke="#FFFFFF" stroke-opacity="0.18"/>
+      <text x="504" y="303" fill="#E2E8F0">Gemini Flash</text>
+
+      <rect x="584" y="280" width="134" height="36" rx="18" fill="#FFFFFF" fill-opacity="0.05" stroke="#FFFFFF" stroke-opacity="0.18"/>
+      <text x="651" y="303" fill="#E2E8F0">Stripe · EUR</text>
+    </g>
+
+    <!-- Platforms line -->
+    <text x="80" y="364" font-family="'JetBrains Mono', 'SFMono-Regular', 'Cascadia Code', Consolas, monospace" font-size="14" font-weight="500" letter-spacing="0.5" fill="#94A3B8">Instagram · TikTok · X · LinkedIn · YouTube</text>
+
+    <!-- ===== Right: card motif ===== -->
+    <!-- Ghost card for depth -->
+    <rect x="852" y="44" width="346" height="300" rx="22" fill="#FFFFFF" fill-opacity="0.025" stroke="#A5B4FC" stroke-opacity="0.18" transform="rotate(4 1025 194)"/>
+
+    <!-- Main card -->
+    <rect x="832" y="64" width="366" height="300" rx="22" fill="url(#hb-card-fill)"/>
+    <rect x="832" y="64" width="366" height="120" rx="22" fill="url(#hb-card-sheen)"/>
+    <rect x="832.75" y="64.75" width="364.5" height="298.5" rx="21.25" fill="none" stroke="url(#hb-card-border)" stroke-width="1.5"/>
+
+    <g font-family="'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, sans-serif">
+      <text x="858" y="104" font-size="17" font-weight="700" fill="#F8FAFC">Hashtag mix</text>
+      <!-- Score pill -->
+      <rect x="1080" y="86" width="92" height="26" rx="13" fill="#34D399" fill-opacity="0.14" stroke="#34D399" stroke-opacity="0.45"/>
+      <text x="1126" y="104" font-size="12" font-weight="700" text-anchor="middle" fill="#A7F3D0">Score 94</text>
+    </g>
+
+    <!-- Stacked mix bar: 35 / 40 / 25 -->
+    <g clip-path="url(#hb-mix-clip)">
+      <rect x="858" y="122" width="314" height="12" fill="#1E293B"/>
+      <rect x="858" y="122" width="110" height="12" fill="#34D399"/>
+      <rect x="970" y="122" width="124" height="12" fill="#818CF8"/>
+      <rect x="1096" y="122" width="76" height="12" fill="#E879F9"/>
+    </g>
+
+    <!-- Legend -->
+    <g font-family="'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, sans-serif" font-size="12" font-weight="600" fill="#CBD5E1">
+      <circle cx="862" cy="156" r="4" fill="#34D399"/>
+      <text x="872" y="160">Rising 35%</text>
+      <circle cx="962" cy="156" r="4" fill="#818CF8"/>
+      <text x="972" y="160">Community 40%</text>
+      <circle cx="1084" cy="156" r="4" fill="#E879F9"/>
+      <text x="1094" y="160">Broad 25%</text>
+    </g>
+
+    <!-- Guides -->
+    <g stroke="#FFFFFF" stroke-opacity="0.07" stroke-width="1" stroke-dasharray="3 5">
+      <line x1="858" y1="212" x2="1172" y2="212"/>
+      <line x1="858" y1="262" x2="1172" y2="262"/>
+      <line x1="858" y1="312" x2="1172" y2="312"/>
+    </g>
+
+    <!-- Bars (baseline y=338) -->
+    <g>
+      <rect x="862" y="288" width="30" height="50" rx="7" fill="url(#hb-bar)" fill-opacity="0.75"/>
+      <rect x="906" y="262" width="30" height="76" rx="7" fill="url(#hb-bar)" fill-opacity="0.8"/>
+      <rect x="950" y="274" width="30" height="64" rx="7" fill="url(#hb-bar)" fill-opacity="0.8"/>
+      <rect x="994" y="232" width="30" height="106" rx="7" fill="url(#hb-bar)" fill-opacity="0.9"/>
+      <rect x="1038" y="248" width="30" height="90" rx="7" fill="url(#hb-bar)" fill-opacity="0.9"/>
+      <rect x="1082" y="196" width="30" height="142" rx="7" fill="url(#hb-bar-hot)"/>
+      <rect x="1126" y="222" width="30" height="116" rx="7" fill="url(#hb-bar)"/>
+      <!-- Highlight cap on the hot bar -->
+      <rect x="1082" y="196" width="30" height="3" rx="1.5" fill="#FFFFFF" fill-opacity="0.6"/>
+    </g>
+    <line x1="858" y1="338.5" x2="1172" y2="338.5" stroke="#FFFFFF" stroke-opacity="0.14"/>
+  </g>
+
+  <!-- Outer hairline so the card edge reads on light backgrounds too -->
+  <rect x="0.5" y="0.5" width="1279" height="419" rx="27.5" fill="none" stroke="#FFFFFF" stroke-opacity="0.08"/>
+</svg>

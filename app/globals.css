@@ -1,1 +1,87 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+/*
+ * Design tokens
+ * -------------
+ * Fonts are loaded with next/font in app/layout.tsx, which sets
+ * --font-display / --font-sans / --font-mono on <html>. Tailwind's own
+ * font-sans and font-mono already resolve to those variables (the next/font
+ * declarations are unlayered, so they win over Tailwind's theme layer).
+ * `font-heading` is added here for the display face. It is named differently
+ * from --font-display on purpose, to avoid a self-referencing variable.
+ *
+ * brand-* copies the values of Tailwind's indigo scale so existing indigo-* classes and new
+ * brand-* classes render identically.
+ */
+@theme inline {
+  --font-heading: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+}
+
+@theme {
+  --color-brand-50: oklch(96.2% 0.018 272.314);
+  --color-brand-100: oklch(93% 0.034 272.788);
+  --color-brand-200: oklch(87% 0.065 274.039);
+  --color-brand-300: oklch(78.5% 0.115 274.713);
+  --color-brand-400: oklch(67.3% 0.182 276.935);
+  --color-brand-500: oklch(58.5% 0.233 277.117);
+  --color-brand-600: oklch(51.1% 0.262 276.966);
+  --color-brand-700: oklch(45.7% 0.24 277.023);
+  --color-brand-800: oklch(39.8% 0.195 277.366);
+  --color-brand-900: oklch(35.9% 0.144 278.697);
+  --color-brand-950: oklch(25.7% 0.09 281.288);
+  --color-canvas: #fafafa;
+
+  /* Infinite horizontal ticker used by components/TrendingMarquee.tsx */
+  --animate-marquee: marquee 38s linear infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: #fafafa;
+  }
+
+  /*
+   * Visible keyboard focus by default. Components that draw their own
+   * focus-visible ring set outline-none, which overrides this (utilities beat base).
+   */
+  :where(a, button, [role='button'], [role='radio'], [role='tab'], input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid oklch(58.5% 0.233 277.117);
+    outline-offset: 2px;
+  }
+}
+
+/*
+ * Respect the OS "Reduce motion" setting (WCAG 2.3.3).
+ * Covers Tailwind animate-* utilities, tw-animate-css enter/exit animations,
+ * the marquee and CSS transitions. JS-driven motion (the motion package) is
+ * handled in components with useReducedMotion().
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-marquee {
+    animation: none !important;
+    transform: none !important;
+  }
+}

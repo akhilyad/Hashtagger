@@ -1,22 +1,22 @@
 'use client';
 
-import React, { useState } from 'react';
-import {
-  Sparkles,
-  Camera,
-  Coins,
-  TrendingUp,
-  Share2,
-  Check,
-  ShieldCheck,
-  ArrowUpRight,
-} from 'lucide-react';
-import { SUPPORTED_CURRENCIES } from '@/lib/currency';
+import React from 'react';
+import { Camera, Coins, TrendingUp, Share2 } from 'lucide-react';
+import { SUPPORTED_CURRENCIES, getCurrency, getPlanCharge } from '@/lib/currency';
+import { PRICING_PLANS } from '@/lib/hashtag-data';
+import { useHashtaggerStore } from '@/lib/use-hashtagger-store';
 
 export default function BentoFeatures() {
-  const [selectedDemoCurrency, setSelectedDemoCurrency] = useState('EUR');
-
-  const demoCurrencies = SUPPORTED_CURRENCIES.slice(0, 4);
+  // The quick picker writes the same shared currency the pricing page and
+  // checkout use, so the price shown here is the price that will be charged.
+  const { isLoaded, selectedCurrency, setSelectedCurrency, billingCycle } =
+    useHashtaggerStore();
+  const activeCode = getCurrency(selectedCurrency).code;
+  const quickCurrencies = SUPPORTED_CURRENCIES.slice(0, 4);
+  const demoCurrencies = quickCurrencies.some((c) => c.code === activeCode)
+    ? quickCurrencies
+    : [...quickCurrencies, getCurrency(activeCode)];
+  const proCharge = getPlanCharge('pro', billingCycle, activeCode);
 
   return (
     <section className="space-y-6">
@@ -32,7 +32,7 @@ export default function BentoFeatures() {
             Built Like High-Frequency Trading for Reach
           </h2>
         </div>
-        <p className="text-xs text-slate-500 max-w-sm">
+        <p className="text-xs text-slate-600 max-w-sm">
           Hashtagger removes algorithmic guesswork through multimodal vision,
           live trend web search, and localized Stripe checkout.
         </p>
@@ -66,7 +66,7 @@ export default function BentoFeatures() {
           <div className="mt-6 p-4 rounded-xl bg-slate-900 text-white font-mono text-xs space-y-2 border border-slate-800">
             <div className="flex items-center justify-between text-[11px] text-slate-400 border-b border-slate-800 pb-2">
               <span className="flex items-center gap-1.5 text-emerald-400">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span aria-hidden className="w-2 h-2 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
                 Live Vision Ingestion
               </span>
               <span>1024-dim Latent Space</span>
@@ -157,30 +157,45 @@ export default function BentoFeatures() {
           </div>
 
           <div className="mt-6 pt-4 border-t border-slate-100 space-y-3">
-            <div className="flex items-center gap-2">
-              {demoCurrencies.map((c) => (
-                <button
-                  key={c.code}
-                  type="button"
-                  onClick={() => setSelectedDemoCurrency(c.code)}
-                  className={`px-2.5 py-1 text-xs rounded-lg border font-mono font-medium transition-all cursor-pointer ${
-                    selectedDemoCurrency === c.code
-                      ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
-                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
-                  }`}
-                >
-                  {c.flag} {c.code}
-                </button>
-              ))}
+            <div
+              role="radiogroup"
+              aria-label="Preview currency"
+              className="flex flex-wrap items-center gap-2"
+            >
+              {demoCurrencies.map((c) => {
+                const isActive = isLoaded && activeCode === c.code;
+                return (
+                  <button
+                    key={c.code}
+                    type="button"
+                    role="radio"
+                    aria-checked={isActive}
+                    onClick={() => setSelectedCurrency(c.code)}
+                    className={`px-2.5 py-1 text-xs rounded-lg border font-mono font-medium transition-[background-color,border-color,transform] active:scale-[0.96] motion-reduce:active:scale-100 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 ${
+                      isActive
+                        ? 'bg-indigo-600 text-white border-indigo-600 shadow-[inset_0_1px_0_rgb(255_255_255/0.2)]'
+                        : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    <span aria-hidden>{c.flag}</span> {c.code}
+                  </button>
+                );
+              })}
             </div>
 
-            <div className="p-3 rounded-xl bg-slate-950 text-white flex items-center justify-between text-xs font-mono">
-              <span className="text-slate-400">Creator Pro Plan:</span>
-              <span className="text-base font-bold text-emerald-400">
-                {selectedDemoCurrency === 'EUR' && '€15/mo (Primary)'}
-                {selectedDemoCurrency === 'USD' && '$16/mo'}
-                {selectedDemoCurrency === 'GBP' && '£13/mo'}
-                {selectedDemoCurrency === 'CAD' && 'CA$22/mo'}
+            <div className="p-3 rounded-xl bg-slate-950 text-white flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-xs font-mono">
+              <span className="text-slate-300">{PRICING_PLANS.pro.name}:</span>
+              <span
+                aria-live="polite"
+                className={`text-base font-bold text-emerald-400 transition-opacity ${
+                  isLoaded ? 'opacity-100' : 'opacity-0'
+                }`}
+              >
+                {proCharge.formattedPerMonth}/mo
+                <span className="ml-1.5 text-[11px] font-medium text-slate-300">
+                  {billingCycle === 'annual' ? 'billed yearly' : 'billed monthly'}
+                  {activeCode === 'EUR' ? ' · primary' : ''}
+                </span>
               </span>
             </div>
           </div>
@@ -219,8 +234,8 @@ export default function BentoFeatures() {
                 className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-xs space-y-1"
               >
                 <span className="font-bold text-slate-950 block">{p.name}</span>
-                <span className="text-[10px] text-slate-500 block font-mono">{p.cap}</span>
-                <span className="text-[10px] text-emerald-700 font-semibold block">
+                <span className="text-[11px] text-slate-600 block font-mono">{p.cap}</span>
+                <span className="text-[11px] text-emerald-700 font-semibold block">
                   {p.sweet}
                 </span>
               </div>

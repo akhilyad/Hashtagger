@@ -11,23 +11,69 @@ const ai = new GoogleGenAI({
   },
 });
 
-export async function POST(req: NextRequest) {
-  try {
-    const body = await req.json();
-    const {
-      caption = '',
-      platform = 'instagram',
-      imageBase64,
-      imageMimeType,
-      useSearchGrounding = false,
-    } = body as {
-      caption?: string;
-      platform?: PlatformId;
-      imageBase64?: string;
-      imageMimeType?: string;
-      useSearchGrounding?: boolean;
-    };
+const MAX_CAPTION_LENGTH = 5000;
+const MAX_IMAGE_BASE64_LENGTH = 8_000_000;
+const ALLOWED_IMAGE_MIME_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/heic']);
 
+function badRequest(error: string) {
+  return NextResponse.json({ error }, { status: 400 });
+}
+
+export async function POST(req: NextRequest) {
+  if (!process.env.GEMINI_API_KEY) {
+    return NextResponse.json(
+      { error: 'Hashtag analysis is not configured on this server (missing Gemini API key).' },
+      { status: 503 }
+    );
+  }
+
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return badRequest('Invalid request body.');
+  }
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return badRequest('Invalid request body.');
+  }
+  const input = body as Record<string, unknown>;
+
+  const caption = input.caption === undefined || input.caption === null ? '' : input.caption;
+  if (typeof caption !== 'string') {
+    return badRequest('Caption must be text.');
+  }
+  if (caption.length > MAX_CAPTION_LENGTH) {
+    return badRequest(`Caption is too long (maximum ${MAX_CAPTION_LENGTH} characters).`);
+  }
+
+  const rawPlatform = input.platform === undefined || input.platform === null ? 'instagram' : input.platform;
+  if (typeof rawPlatform !== 'string' || !Object.prototype.hasOwnProperty.call(PLATFORM_SPECS, rawPlatform)) {
+    return badRequest('Unsupported platform.');
+  }
+  const platform = rawPlatform as PlatformId;
+
+  let imageMimeType: string | undefined;
+  if (input.imageMimeType !== undefined && input.imageMimeType !== null && input.imageMimeType !== '') {
+    if (typeof input.imageMimeType !== 'string' || !ALLOWED_IMAGE_MIME_TYPES.has(input.imageMimeType)) {
+      return badRequest('Unsupported image type. Please upload a JPEG, PNG, WebP, GIF or HEIC image.');
+    }
+    imageMimeType = input.imageMimeType;
+  }
+
+  let imageBase64: string | undefined;
+  if (input.imageBase64 !== undefined && input.imageBase64 !== null && input.imageBase64 !== '') {
+    if (typeof input.imageBase64 !== 'string') {
+      return badRequest('Invalid image data.');
+    }
+    if (input.imageBase64.length > MAX_IMAGE_BASE64_LENGTH) {
+      return badRequest('Image is too large. Please upload a smaller image.');
+    }
+    imageBase64 = input.imageBase64;
+  }
+
+  const useSearchGrounding = input.useSearchGrounding === true;
+
+  try {
     if (!caption.trim() && !imageBase64) {
       return NextResponse.json(
         { error: 'Please provide a post caption or upload an image to analyze.' },
@@ -35,7 +81,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const spec = PLATFORM_SPECS[platform] || PLATFORM_SPECS.instagram;
+    const spec = PLATFORM_SPECS[platform];
 
     const systemInstruction = `You are HASHTAGGER, an elite social media growth strategist and real-time hashtag intelligence engine.
 Analyze the user's social media post caption and any attached image for ${spec.name}.
@@ -232,11 +278,8 @@ Generate a structured tiered hashtag analysis for this post.`,
       groundingSources,
     });
   } catch (error: unknown) {
+    // Details (SDK messages, upstream errors) stay in server logs only.
     console.error('Error analyzing hashtags:', error);
-    const message =
-      error instanceof Error
-        ? error.message
-        : 'Failed to analyze post with Gemini AI.';
-    return NextResponse.json({ error: message }, { status: 500 });
+    return NextResponse.json({ error: 'Hashtag analysis failed. Please try again.' }, { status: 500 });
   }
 }

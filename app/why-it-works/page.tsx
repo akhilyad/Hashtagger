@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, TrendingUp, Users, Compass, CheckCircle } from 'lucide-react';
+import { ArrowRight, TrendingUp, Users, Compass } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { PLATFORM_SPECS, PlatformId } from '@/lib/hashtag-data';

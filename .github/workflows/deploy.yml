@@ -37,11 +37,16 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
 
       - name: Build Next.js Static Export
         env:
           GITHUB_PAGES: 'true'
+          # Static export has no API routes: checkout runs as a clearly labelled demo.
+          NEXT_PUBLIC_PAYMENTS_DEMO: 'true'
         run: npm run build
 
       - name: Upload artifact
