@@ -33,3 +33,8 @@ venv/
 env/
 build/
 dist/
+.next/
+*.zip
+.aistudio/
+*.tsbuildinfo
+

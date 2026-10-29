@@ -1,0 +1,8 @@
+{
+  "name": "HASHTAGGER",
+  "description": "Drop in your text or photo. Hashtagger picks the best trending hashtags so more people actually see your posts on Instagram, TikTok, and X",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
